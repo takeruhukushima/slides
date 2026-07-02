@@ -1,0 +1,64 @@
+---
+title: 'はじめてのスライド'
+description: 'slides.yusu.ke のスライドの書き方デモ'
+date: '2026-07-02'
+slide: true
+theme: dark
+---
+
+# はじめてのスライド
+
+slides.yusu.ke
+
+Yusuke Wada
+
+---
+
+## Markdown で書ける
+
+- frontmatter に `slide: true` を付けるとスライドになる
+- 本文中の `---` でページを分割
+- `theme: dark` / `light` でテーマ切り替え
+
+slidev / reveal.js と同じ感覚で書けます。
+
+---
+
+## コードもハイライトされる
+
+```ts
+import { Hono } from 'hono'
+
+const app = new Hono()
+app.get('/', (c) => c.text('Hello slides.yusu.ke!'))
+
+export default app
+```
+
+`pre` にホバーすると Copy ボタンが出ます。
+
+---
+
+## 左右2カラム
+
+左側に箇条書き
+
+- Workers
+- Hono
+- HonoX
+
+::right::
+
+![Hono](https://hono.dev/images/logo.png)
+
+`::right::` で区切るだけ。見出しは上に残ります。
+
+---
+
+## 操作方法
+
+- `←` `→` / `space`: ページ移動
+- スマホ: 左右スワイプ
+- `f`: フルスクリーン
+
+Enjoy! 🎉

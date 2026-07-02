@@ -1,0 +1,212 @@
+:root {
+  --slide-bg: #1a1a1a;
+  --slide-fg: #f2f2f2;
+  --slide-accent: #ff6a00;
+  --slide-muted: #8a8a8a;
+  --slide-code-bg: #0d0d0d;
+  --slide-border: rgba(255, 255, 255, 0.12);
+  --slide-font: system-ui, -apple-system, 'Helvetica Neue', 'Hiragino Sans',
+    'Noto Sans JP', sans-serif;
+}
+body[data-theme='light'] {
+  --slide-bg: #fafafa;
+  --slide-fg: #1f1f1f;
+  --slide-accent: #ff6a00;
+  --slide-muted: #777;
+  --slide-code-bg: #f0f0f0;
+  --slide-border: rgba(0, 0, 0, 0.12);
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  background: var(--slide-bg);
+  color: var(--slide-fg);
+  font-family: var(--slide-font);
+  overflow: hidden;
+}
+#deck {
+  position: fixed;
+  inset: 0;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6vh 9vw;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.slide.active {
+  display: flex;
+  animation: slide-in 0.25s ease;
+}
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.slide > :first-child {
+  margin-top: 0;
+}
+.slide h1 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  color: var(--slide-accent);
+  line-height: 1.15;
+  margin: 0 0 1.5rem;
+  border: none;
+}
+.slide h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--slide-accent);
+  line-height: 1.2;
+  margin: 0 0 1.2rem;
+  border: none;
+}
+.slide h3 {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  margin: 0 0 1rem;
+}
+.slide p,
+.slide li {
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  line-height: 1.6;
+}
+.slide ul,
+.slide ol {
+  padding-left: 1.4em;
+}
+.slide li {
+  margin: 0.35em 0;
+}
+.slide a {
+  color: var(--slide-accent);
+}
+.slide img {
+  max-height: 58vh;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  margin: 1rem auto;
+  border-radius: 6px;
+}
+/* Two-column layout: use a `::right::` marker in markdown */
+.slide .cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4vw;
+  align-items: center;
+  width: 100%;
+}
+.slide .cols.left-wide {
+  grid-template-columns: 1.4fr 1fr;
+}
+.slide .cols.right-wide {
+  grid-template-columns: 1fr 1.4fr;
+}
+.slide .cols > * > :first-child {
+  margin-top: 0;
+}
+.slide .cols img {
+  margin: 0 auto;
+  max-height: 70vh;
+}
+@media (max-width: 768px) {
+  .slide .cols {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+.slide blockquote {
+  border-left: 4px solid var(--slide-accent);
+  margin: 0 0 1rem;
+  padding: 0.2rem 0 0.2rem 1.2rem;
+  color: var(--slide-muted);
+}
+.slide pre {
+  position: relative;
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  background: var(--slide-code-bg);
+  border: 1px solid var(--slide-border);
+  padding: 1.2rem 1.5rem;
+  border-radius: 10px;
+  overflow: auto;
+  max-height: 64vh;
+  line-height: 1.5;
+}
+.slide :not(pre) > code {
+  background: rgba(127, 127, 127, 0.18);
+  color: var(--slide-fg);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 0.25em 0.7em;
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #ddd;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease;
+}
+.slide pre:hover .copy-btn,
+.copy-btn:focus-visible {
+  opacity: 1;
+}
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.copy-btn.copied {
+  color: #fff;
+  background: var(--slide-accent);
+  border-color: var(--slide-accent);
+  opacity: 1;
+}
+#progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 0;
+  background: var(--slide-accent);
+  transition: width 0.2s ease;
+  z-index: 10;
+}
+#counter {
+  position: fixed;
+  bottom: 12px;
+  right: 18px;
+  font-size: 0.9rem;
+  color: var(--slide-muted);
+  font-variant-numeric: tabular-nums;
+  z-index: 10;
+}
+#hint {
+  position: fixed;
+  bottom: 12px;
+  left: 18px;
+  font-size: 0.8rem;
+  color: var(--slide-muted);
+  opacity: 0.6;
+  z-index: 10;
+}
