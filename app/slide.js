@@ -119,6 +119,43 @@
     pre.appendChild(btn)
   })
 
+  // --- Mol* protein viewer -------------------------------------------------
+  // Chimera-class rendering (high-quality cartoons, surfaces, ambient
+  // occlusion) via the Mol* engine — the same one RCSB's site uses. The
+  // library is loaded from a CDN in _renderer.tsx; here we just spin up a
+  // viewport in each placeholder div and load a structure straight from RCSB.
+  // Markup: <div class="molstar-viewer" data-pdb="1CRN" data-preset="cartoon">.
+  var molstarViewers = []
+  function initMolstar(el) {
+    var id = (el.getAttribute('data-pdb') || '').toUpperCase()
+    el.textContent = '' // clear the "Loading…" fallback text
+    window.molstar.Viewer.create(el, {
+      layoutIsExpanded: false,
+      layoutShowControls: false,
+      layoutShowSequence: false,
+      layoutShowLog: false,
+      layoutShowLeftPanel: false,
+      viewportShowExpand: false,
+      viewportShowSelectionMode: false,
+      viewportShowAnimation: false,
+      viewportShowControls: false,
+      pdbProvider: 'rcsb',
+      pixelScale: window.devicePixelRatio || 1
+    }).then(function (viewer) {
+      molstarViewers.push(viewer)
+      // Default auto preset: high-quality cartoon + ligands (ball-and-stick).
+      return viewer.loadPdb(id)
+    }).catch(function () {
+      el.textContent = 'Failed to load ' + id
+    })
+  }
+  if (window.molstar && window.molstar.Viewer) {
+    Array.prototype.forEach.call(
+      root.querySelectorAll('.molstar-viewer'),
+      initMolstar
+    )
+  }
+
   var idx = 0
   var counter = document.getElementById('counter')
   var progress = document.getElementById('progress')
@@ -131,6 +168,16 @@
     progress.style.width = ((idx + 1) / slides.length) * 100 + '%'
     var active = slides[idx]
     if (active) active.scrollTop = 0
+    // A Mol* viewport initialised while its slide was display:none starts at
+    // zero size; nudge it to re-fit once the slide is visible.
+    if (molstarViewers.length) {
+      requestAnimationFrame(function () {
+        window.dispatchEvent(new Event('resize'))
+        molstarViewers.forEach(function (v) {
+          try { v.handleResize() } catch (e) {}
+        })
+      })
+    }
   }
   function clamp(n) {
     return Math.max(0, Math.min(slides.length - 1, n))

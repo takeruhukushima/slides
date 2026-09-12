@@ -36,6 +36,10 @@ export const rendererMiddleware = createMiddleware(async (c, next) => {
           rel='stylesheet'
           href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css'
         />
+        <link
+          rel='stylesheet'
+          href='https://cdn.jsdelivr.net/npm/molstar@5.11.0/build/viewer/molstar.css'
+        />
         <title>{head.title}</title>
         <meta property='og:title' content={head.title} />
         {head.description ? (
@@ -70,6 +74,7 @@ export const rendererMiddleware = createMiddleware(async (c, next) => {
             <div id='counter'></div>
             <div id='hint'>← → / space ・ f: fullscreen</div>
             <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js'></script>
+            <script src='https://cdn.jsdelivr.net/npm/molstar@5.11.0/build/viewer/molstar.js'></script>
             <script>{raw(slideScript)}</script>
           </body>
         </html>

@@ -1,0 +1,116 @@
+---
+title: 'The Cell 細胞の分子生物学'
+description: '図・SVG・Mol* によるPDBタンパク質描画を試す学習スライド'
+date: '2026-09-13'
+slide: true
+theme: dark
+---
+
+# The Cell
+
+細胞の分子生物学 — 図で学ぶ
+
+SVG と、**Mol\*** による ChimeraX 級のタンパク質描画
+
+Takeru Fukushima
+
+---
+
+## 手描き SVG：細胞膜の脂質二重層
+
+<svg viewBox="0 0 520 260" width="520" style="max-width:100%">
+  <defs>
+    <radialGradient id="head" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffd27f" />
+      <stop offset="100%" stop-color="#ff9d3b" />
+    </radialGradient>
+  </defs>
+  {Array.from({ length: 13 }).map((_, i) => {
+    const x = 30 + i * 37
+    return (
+      <g key={i}>
+        {/* upper leaflet */}
+        <circle cx={x} cy={70} r={12} fill="url(#head)" stroke="#7a4a10" stroke-width="1.5" />
+        <line x1={x - 4} y1={82} x2={x - 4} y2={120} stroke="#c9c9c9" stroke-width="2.5" />
+        <line x1={x + 4} y1={82} x2={x + 4} y2={120} stroke="#c9c9c9" stroke-width="2.5" />
+        {/* lower leaflet */}
+        <circle cx={x} cy={190} r={12} fill="url(#head)" stroke="#7a4a10" stroke-width="1.5" />
+        <line x1={x - 4} y1={178} x2={x - 4} y2={140} stroke="#c9c9c9" stroke-width="2.5" />
+        <line x1={x + 4} y1={178} x2={x + 4} y2={140} stroke="#c9c9c9" stroke-width="2.5" />
+      </g>
+    )
+  })}
+  <text x="260" y="135" text-anchor="middle" fill="#8a8a8a" font-size="13">hydrophobic core</text>
+</svg>
+
+親水性の頭部（黄）と疎水性の尾部（灰）が向かい合う二重層。JSX なので `map()` で並べられる。
+
+---
+
+## PDB からタンパク質を描画
+
+クランビン（**1CRN**, 46残基）を高品質カートゥーンで。
+
+- **ドラッグ**で回転、**ホイール**でズーム
+- 二次構造（αヘリックス・βシート）を自動認識
+
+::right::
+
+<div class="molstar-viewer" data-pdb="1CRN">Loading 1CRN…</div>
+
+<p class="pdb-cap">Data: RCSB PDB <a href="https://www.rcsb.org/structure/1CRN">1CRN</a> — rendered with Mol*</p>
+
+---
+
+## 多量体とリガンド
+
+ヘモグロビン（**4HHB**）。4本のグロビン鎖を色分けし、ヘム（鉄ポルフィリン）を ball-and-stick で自動表示。
+
+::right::
+
+<div class="molstar-viewer" data-pdb="4HHB">Loading 4HHB…</div>
+
+<p class="pdb-cap">Data: RCSB PDB <a href="https://www.rcsb.org/structure/4HHB">4HHB</a> — rendered with Mol*</p>
+
+---
+
+## しくみ
+
+```html
+<!-- _renderer.tsx: スライドページに CDN から読み込む -->
+<link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/molstar@5.11.0/build/viewer/molstar.css">
+<script src="https://cdn.jsdelivr.net/npm/molstar@5.11.0/build/viewer/molstar.js"></script>
+```
+
+```js
+// slide.js: プレースホルダ div にビューワを初期化
+molstar.Viewer.create(el, { layoutShowControls: false })
+  .then((viewer) => viewer.loadPdb('1CRN')) // RCSB から直接取得
+```
+
+Mol\* は **RCSB 公式ビューワの中身**。高品質カートゥーン・分子表面・環境遮蔽(SSAO) に対応。
+
+---
+
+## 参考文献
+
+本スライドは下記書籍を学習した個人ノートです。図版・本文の転載はせず、要約と自作図・公開データのみで構成しています。
+
+- **書名**: 細胞の分子生物学 原書第7版（Molecular Biology of the Cell, 7th ed.）
+- **著者**: B. Alberts, R. Heald, A. Johnson, D. Morgan, M. Raff, K. Roberts, P. Walter
+- **監修**: 中村桂子 ／ **監訳**: 水島昇・塩見春彦・三浦正幸・中山啓子
+- **出版社**: メディカル・サイエンス・インターナショナル（2025年7月）
+- **ISBN**: 978-4-8157-3131-1
+- 出版社ページ: <a href="https://www.medsi.co.jp/products/detail/4021">medsi.co.jp/products/detail/4021</a>
+- タンパク質構造: RCSB PDB (<a href="https://www.rcsb.org/">rcsb.org</a>) — 各構造のIDを明記
+
+---
+
+## まとめ
+
+- **図**: Markdown 内にそのまま画像
+- **SVG**: JSX で式展開しながら描ける（`map()` など）
+- **タンパク質**: PDB を引用し、Mol\* で ChimeraX 級に描画
+
+次は章の内容を、この描画を使いながらまとめていく 🧬

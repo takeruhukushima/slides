@@ -100,6 +100,35 @@ body {
   margin: 1rem auto;
   border-radius: 6px;
 }
+/* Mol* protein viewport (<div class="molstar-viewer" data-pdb="...">) */
+.molstar-viewer {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: min(62vh, 460px);
+  margin: 0.5rem auto;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--slide-border);
+  background: #0b0f16;
+  color: var(--slide-muted);
+  font-size: 0.9rem;
+  /* center the fallback "Loading…" text before the viewer takes over */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+.pdb-cap {
+  text-align: center;
+  color: var(--slide-muted);
+  font-size: 0.85rem !important;
+  margin: 0.2rem 0 0;
+}
+.pdb-cap a {
+  color: var(--slide-muted);
+}
+
 /* Two-column layout: use a `::right::` marker in markdown */
 .slide .cols {
   display: grid;
