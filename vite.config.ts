@@ -10,6 +10,8 @@ const entry = './app/server.ts'
 
 export default defineConfig(() => {
   return {
+    // GitHub Pages のプロジェクトサイト (takeruhukushima.github.io/slides/) 配下に配置するため
+    base: '/slides/',
     plugins: [
       honox({
         devServer: {

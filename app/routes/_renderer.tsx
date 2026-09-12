@@ -31,7 +31,7 @@ export const rendererMiddleware = createMiddleware(async (c, next) => {
           name='viewport'
           content='width=device-width, initial-scale=1.0'
         />
-        <link rel='shortcut icon' href='/favicon.ico' />
+        <link rel='shortcut icon' href='favicon.ico' />
         <link
           rel='stylesheet'
           href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css'
