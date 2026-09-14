@@ -156,6 +156,106 @@ body {
     gap: 1rem;
   }
 }
+/* --- VexFlow staff notation (Bravura) ----------------------------------- */
+.vf-stave {
+  color: var(--slide-fg);
+  min-height: 1.5em;
+}
+.vf-stave svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+/* VexFlow paints glyphs/lines with fill; recolor to the slide foreground so
+   the notation is visible on both dark and light themes. */
+.vf-stave svg path,
+.vf-stave svg rect,
+.vf-stave svg text {
+  fill: var(--slide-fg);
+}
+
+/* --- Key-signature correspondence table --------------------------------- */
+.ks-table {
+  display: grid;
+  grid-template-columns: minmax(2.4em, auto) minmax(120px, 190px) 1fr 1fr;
+  align-items: center;
+  column-gap: 1.2rem;
+  width: 100%;
+}
+.ks-h {
+  font-size: clamp(0.72rem, 1.4vw, 0.95rem);
+  font-weight: 600;
+  color: var(--slide-muted);
+  padding: 0 0 0.4rem;
+  border-bottom: 2px solid var(--slide-border);
+}
+.ks-n {
+  font-size: clamp(0.85rem, 1.8vw, 1.15rem);
+  font-variant-numeric: tabular-nums;
+  color: var(--slide-fg);
+}
+.ks-table .vf-stave {
+  padding: 0.15rem 0;
+}
+.ks-table .vf-stave svg {
+  max-height: clamp(46px, 8vh, 66px);
+}
+.ks-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  padding: 0.2rem 0;
+}
+.ks-name b {
+  font-size: clamp(0.85rem, 1.7vw, 1.15rem);
+  font-weight: 600;
+}
+.ks-name span {
+  font-size: clamp(0.68rem, 1.2vw, 0.85rem);
+  color: var(--slide-muted);
+}
+.ks-n,
+.ks-table .vf-stave,
+.ks-name {
+  border-bottom: 1px solid var(--slide-border);
+}
+.ks-note {
+  color: var(--slide-muted);
+  font-size: clamp(0.8rem, 1.4vw, 1rem) !important;
+  margin: 0.8rem 0 0;
+}
+
+/* --- Circle of fifths --------------------------------------------------- */
+.cof {
+  display: block;
+  width: min(74vh, 100%);
+  max-height: 74vh;
+  margin: 0 auto;
+}
+.cof .cof-ring {
+  fill: none;
+  stroke: var(--slide-border);
+}
+.cof .cof-spoke {
+  stroke: var(--slide-border);
+  stroke-width: 1;
+}
+.cof .cof-maj {
+  fill: var(--slide-fg);
+  font-weight: 600;
+}
+.cof .cof-min {
+  fill: var(--slide-muted);
+}
+.cof .cof-c {
+  fill: var(--slide-accent);
+}
+.cof text {
+  font-family: var(--slide-font);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
 .slide blockquote {
   border-left: 4px solid var(--slide-accent);
   margin: 0 0 1rem;

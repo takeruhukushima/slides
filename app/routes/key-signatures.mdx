@@ -1,0 +1,156 @@
+---
+title: '調号と音階 — Key Signatures'
+description: 'Bravura フォント（VexFlow）で全 15 調号と長調・短調・スケールを五線譜に描く'
+date: '2026-09-14'
+slide: true
+theme: dark
+---
+
+export const sharps = [
+  { n: 'なし', key: 'C', maj: ['ハ長調 C-Dur', 'C major'], min: ['イ短調 a-moll', 'A minor'] },
+  { n: '♯ 1', key: 'G', maj: ['ト長調 G-Dur', 'G major'], min: ['ホ短調 e-moll', 'E minor'] },
+  { n: '♯ 2', key: 'D', maj: ['ニ長調 D-Dur', 'D major'], min: ['ロ短調 h-moll', 'B minor'] },
+  { n: '♯ 3', key: 'A', maj: ['イ長調 A-Dur', 'A major'], min: ['嬰ヘ短調 fis-moll', 'F♯ minor'] },
+  { n: '♯ 4', key: 'E', maj: ['ホ長調 E-Dur', 'E major'], min: ['嬰ハ短調 cis-moll', 'C♯ minor'] },
+  { n: '♯ 5', key: 'B', maj: ['ロ長調 H-Dur', 'B major'], min: ['嬰ト短調 gis-moll', 'G♯ minor'] },
+  { n: '♯ 6', key: 'F#', maj: ['嬰ヘ長調 Fis-Dur', 'F♯ major'], min: ['嬰ニ短調 dis-moll', 'D♯ minor'] },
+  { n: '♯ 7', key: 'C#', maj: ['嬰ハ長調 Cis-Dur', 'C♯ major'], min: ['嬰イ短調 ais-moll', 'A♯ minor'] }
+]
+
+export const flats = [
+  { n: '♭ 1', key: 'F', maj: ['ヘ長調 F-Dur', 'F major'], min: ['ニ短調 d-moll', 'D minor'] },
+  { n: '♭ 2', key: 'Bb', maj: ['変ロ長調 B-Dur', 'B♭ major'], min: ['ト短調 g-moll', 'G minor'] },
+  { n: '♭ 3', key: 'Eb', maj: ['変ホ長調 Es-Dur', 'E♭ major'], min: ['ハ短調 c-moll', 'C minor'] },
+  { n: '♭ 4', key: 'Ab', maj: ['変イ長調 As-Dur', 'A♭ major'], min: ['ヘ短調 f-moll', 'F minor'] },
+  { n: '♭ 5', key: 'Db', maj: ['変ニ長調 Des-Dur', 'D♭ major'], min: ['変ロ短調 b-moll', 'B♭ minor'] },
+  { n: '♭ 6', key: 'Gb', maj: ['変ト長調 Ges-Dur', 'G♭ major'], min: ['変ホ短調 es-moll', 'E♭ minor'] },
+  { n: '♭ 7', key: 'Cb', maj: ['変ハ長調 Ces-Dur', 'C♭ major'], min: ['変イ短調 as-moll', 'A♭ minor'] }
+]
+
+export const KsRow = (r) => (
+  <>
+    <div class="ks-n">{r.n}</div>
+    <div class="vf-stave" data-key={r.key} data-width="150">♪</div>
+    <div class="ks-name"><b>{r.maj[0]}</b><span>{r.maj[1]}</span></div>
+    <div class="ks-name"><b>{r.min[0]}</b><span>{r.min[1]}</span></div>
+  </>
+)
+
+export const circle = [
+  { maj: 'C', min: 'Am' }, { maj: 'G', min: 'Em' }, { maj: 'D', min: 'Bm' },
+  { maj: 'A', min: 'F♯m' }, { maj: 'E', min: 'C♯m' }, { maj: 'B', min: 'G♯m' },
+  { maj: 'G♭', min: 'E♭m' }, { maj: 'D♭', min: 'B♭m' }, { maj: 'A♭', min: 'Fm' },
+  { maj: 'E♭', min: 'Cm' }, { maj: 'B♭', min: 'Gm' }, { maj: 'F', min: 'Dm' }
+]
+
+export const pt = (r, deg) => {
+  const a = ((deg - 90) * Math.PI) / 180
+  return [200 + r * Math.cos(a), 200 + r * Math.sin(a)]
+}
+
+# 調号と音階
+
+五線譜の**調号**から、長調 (Dur) と短調 (moll) を一覧に
+
+Bravura フォント（VexFlow）でブラウザ上に描画
+
+Takeru Fukushima ・ 元資料: ジャズのキーシグネチャー
+
+---
+
+## 読み方 — 調号のしくみ
+
+- **調号**（音部記号のとなりの ♯／♭ の並び）が、その曲の音階（スケール）を決める
+- 同じ調号を共有する長調と短調を **平行調 (relative key)** と呼ぶ
+- **♯ が付く順序**：ファ → ド → ソ → レ → ラ → ミ → シ
+- **♭ が付く順序**：シ → ミ → ラ → レ → ソ → ド → ファ（♯の逆）
+
+::right::
+
+<div class="vf-stave" data-key="D" data-width="240" data-height="150">♪</div>
+
+ニ長調 D-Dur（♯2）の調号。**ファ (F♯)** と **ド (C♯)** に ♯ が付く。平行調は **ロ短調 h-moll**。
+
+---
+
+## ♯ 系（シャープ）
+
+<div class="ks-table">
+  <div class="ks-h">個数</div>
+  <div class="ks-h">調号</div>
+  <div class="ks-h">長調 / Dur</div>
+  <div class="ks-h">短調 / moll</div>
+  {sharps.map((r) => KsRow(r))}
+</div>
+
+<p class="ks-note">ド → ソ → レ … と完全5度ずつ上がるたびに ♯ が1つ増える。♯7 の嬰ハ長調まで。</p>
+
+---
+
+## ♭ 系（フラット）
+
+<div class="ks-table">
+  <div class="ks-h">個数</div>
+  <div class="ks-h">調号</div>
+  <div class="ks-h">長調 / Dur</div>
+  <div class="ks-h">短調 / moll</div>
+  {flats.map((r) => KsRow(r))}
+</div>
+
+<p class="ks-note">ド → ファ → 変ロ … と完全4度ずつ上がる（完全5度ずつ下がる）たびに ♭ が1つ増える。♭7 の変ハ長調まで。</p>
+
+---
+
+## 五度圏 — Circle of Fifths
+
+<svg class="cof" viewBox="0 0 400 400" role="img" aria-label="五度圏">
+  <circle class="cof-ring" cx="200" cy="200" r="176" />
+  <circle class="cof-ring" cx="200" cy="200" r="132" />
+  <circle class="cof-ring" cx="200" cy="200" r="86" />
+  {circle.map((e, i) => {
+    const [x1, y1] = pt(86, i * 30)
+    const [x2, y2] = pt(176, i * 30)
+    const [mx, my] = pt(154, i * 30)
+    const [nx, ny] = pt(109, i * 30)
+    return (
+      <g key={i}>
+        <line class="cof-spoke" x1={x1} y1={y1} x2={x2} y2={y2} />
+        <text class={i === 0 ? 'cof-maj cof-c' : 'cof-maj'} x={mx} y={my} font-size="22">{e.maj}</text>
+        <text class="cof-min" x={nx} y={ny} font-size="16">{e.min}</text>
+      </g>
+    )
+  })}
+  <text class="cof-min" x="200" y="200" font-size="13">♯ →</text>
+</svg>
+
+::right::
+
+- 時計回りに完全5度ずつ進むと **♯ が1つずつ増える**（C→G→D…）
+- 反時計回りは完全4度＝♭ が1つずつ増える（C→F→B♭…）
+- 外側が**長調**、内側が**平行短調**
+- 底部（6時）は **G♭ ＝ F♯** の異名同音。表記で ♭6／♯6 を区別する
+
+---
+
+## スケールを実音で
+
+同じ「ドレミファソラシド」でも、主音（開始音）と調号が変わる。調号に含まれる音には臨時記号を書かない。
+
+<div class="vf-stave" data-key="C" data-scale="c/4,d/4,e/4,f/4,g/4,a/4,b/4,c/5" data-width="440" data-height="120">♪</div>
+
+**ハ長調 C major** — 調号なし。すべて白鍵（幹音）。
+
+<div class="vf-stave" data-key="G" data-scale="g/4,a/4,b/4,c/5,d/5,e/5,f#/5,g/5" data-width="440" data-height="120">♪</div>
+
+**ト長調 G major** — 調号 ♯1。第7音の **F♯** は調号で示されるので音符には ♯ を付けない。
+
+---
+
+## まとめ
+
+- **調号 → 調** は 1 対 1（長調・短調は平行調としてペア）で、全部で **15 種**（異名同音を別と数える）
+- **♯ 系 7 つ・♭ 系 7 つ・調号なし 1 つ**。並ぶ順序はファ→ド→ソ→…（♯）／その逆（♭）
+- **五度圏**で完全5度＝♯、完全4度＝♭ の増減として一望できる
+- 描画はすべて **Bravura**（SMuFL 準拠の楽譜フォント）を **VexFlow** 経由でブラウザ内レンダリング
+
+<p class="ks-note">短調の基準は自然短音階。和声的・旋律的短音階の変化音は臨時記号で表す。ドイツ語の H＝英 B、ドイツ語 B＝英 B♭。嬰＝♯、変＝♭。</p>

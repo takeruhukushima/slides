@@ -156,6 +156,63 @@
     )
   }
 
+  // --- VexFlow: staff notation with the Bravura font -----------------------
+  // Renders key signatures / scales on a five-line staff. VexFlow 4 ships the
+  // Bravura glyph outlines embedded (no webfont needed) and draws to inline
+  // SVG. Markup: <div class="vf-stave" data-key="G" data-clef="treble"
+  //   data-scale="g/4,a/4,..." data-width="150">. The library is loaded on
+  // demand from a CDN only when a page actually contains staves.
+  function drawStaves() {
+    if (!window.Vex) return
+    var VF = window.Vex.Flow
+    Array.prototype.forEach.call(root.querySelectorAll('.vf-stave'), function (el) {
+      if (el.getAttribute('data-drawn')) return
+      el.setAttribute('data-drawn', '1')
+      el.textContent = ''
+      try {
+        var key = el.getAttribute('data-key') || ''
+        var clef = el.getAttribute('data-clef') || 'treble'
+        var scale = el.getAttribute('data-scale')
+        var w = parseInt(el.getAttribute('data-width') || '', 10) || (scale ? 380 : 150)
+        var h = parseInt(el.getAttribute('data-height') || '', 10) || 96
+        var renderer = new VF.Renderer(el, VF.Renderer.Backends.SVG)
+        renderer.resize(w, h)
+        var ctx = renderer.getContext()
+        var stave = new VF.Stave(1, 6, w - 2, {
+          space_above_staff_ln: 1,
+          space_below_staff_ln: 1
+        })
+        stave.addClef(clef)
+        if (key) stave.addKeySignature(key)
+        stave.setContext(ctx).draw()
+        if (scale) {
+          var notes = scale.split(',').map(function (k) {
+            return new VF.StaveNote({ clef: clef, keys: [k.trim()], duration: 'q' })
+          })
+          var voice = new VF.Voice({ num_beats: notes.length, beat_value: 4 })
+            .setStrict(false)
+            .addTickables(notes)
+          // Hide accidentals already implied by the key signature.
+          VF.Accidental.applyAccidentals([voice], key || 'C')
+          new VF.Formatter().joinVoices([voice]).format([voice], w - stave.getNoteStartX() - 20)
+          voice.draw(ctx, stave)
+        }
+      } catch (e) {
+        el.textContent = '楽譜の描画に失敗'
+      }
+    })
+  }
+  if (root.querySelector('.vf-stave')) {
+    if (window.Vex) {
+      drawStaves()
+    } else {
+      var vf = document.createElement('script')
+      vf.src = 'https://cdn.jsdelivr.net/npm/vexflow@4.2.4/build/cjs/vexflow.js'
+      vf.onload = drawStaves
+      document.head.appendChild(vf)
+    }
+  }
+
   var idx = 0
   var counter = document.getElementById('counter')
   var progress = document.getElementById('progress')
